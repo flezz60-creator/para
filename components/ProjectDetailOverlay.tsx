@@ -11,6 +11,40 @@ const ProjectDetailOverlay: React.FC<ProjectDetailOverlayProps> = ({ project, on
   const [isVisible, setIsVisible] = useState(false);
   const [activeDemo, setActiveDemo] = useState(false);
 
+  // Check if this is the Forest project to apply the specific theme
+  const isForest = project.id === 'forest';
+
+  // THEME CONFIGURATION
+  const theme = isForest ? {
+    bg: 'bg-gradient-to-b from-[#020b0a] to-[#0f2e28]',
+    textMain: 'text-emerald-100/80',
+    textHeading: 'text-emerald-400',
+    textSub: 'text-emerald-200/60',
+    border: 'border-emerald-800/30',
+    tagBg: 'bg-emerald-900/40',
+    tagText: 'text-emerald-300',
+    closeBtn: 'bg-black/20 hover:bg-emerald-900/50 text-emerald-400 border-emerald-800/50',
+    heroGradient: 'from-[#020b0a] via-transparent to-black/60',
+    statsLabel: 'text-emerald-600',
+    statsValue: 'text-emerald-100',
+    btnPrimary: 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_20px_rgba(5,150,105,0.4)]',
+    backBtn: 'text-emerald-500 hover:text-emerald-300'
+  } : {
+    bg: 'bg-white',
+    textMain: 'text-slate-600',
+    textHeading: 'text-slate-900',
+    textSub: 'text-slate-500',
+    border: 'border-slate-100',
+    tagBg: 'bg-slate-100',
+    tagText: 'text-slate-600',
+    closeBtn: 'bg-white/80 hover:bg-sky-50 text-slate-900 hover:text-sky-600 border-slate-100',
+    heroGradient: 'from-white via-transparent to-black/30',
+    statsLabel: 'text-slate-400',
+    statsValue: 'text-slate-900',
+    btnPrimary: 'bg-slate-900 hover:bg-sky-600 text-white shadow-xl',
+    backBtn: 'text-slate-900 hover:text-sky-600'
+  };
+
   useEffect(() => {
     // Trigger entrance animation
     setIsVisible(true);
@@ -31,19 +65,25 @@ const ProjectDetailOverlay: React.FC<ProjectDetailOverlayProps> = ({ project, on
   }
 
   return (
-    <div className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-500 ${isVisible ? 'bg-slate-900/60 backdrop-blur-sm' : 'bg-transparent pointer-events-none'}`}>
+    <div className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-500 ${isVisible ? 'bg-slate-900/80 backdrop-blur-sm' : 'bg-transparent pointer-events-none'}`}>
       
       {/* Main Content Sheet */}
       <div 
-        className={`bg-white w-full h-full md:w-[95%] md:h-[95%] md:rounded-3xl shadow-2xl overflow-y-auto relative transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-full opacity-0 scale-95'}`}
+        className={`
+            ${theme.bg} 
+            w-full h-full md:w-[95%] md:h-[95%] md:rounded-3xl shadow-2xl overflow-y-auto relative 
+            transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] 
+            ${isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-full opacity-0 scale-95'}
+            scrollbar-thin scrollbar-thumb-emerald-800 scrollbar-track-transparent
+        `}
       >
         
         {/* Close Button - Sticky */}
         <button 
           onClick={handleClose}
-          className="fixed top-6 right-6 z-50 bg-white/80 backdrop-blur-md p-4 rounded-full shadow-lg hover:bg-sky-50 transition-colors group border border-slate-100"
+          className={`fixed top-6 right-6 z-50 backdrop-blur-md p-4 rounded-full shadow-lg transition-colors group border ${theme.closeBtn}`}
         >
-          <svg className="w-6 h-6 text-slate-900 group-hover:text-sky-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-6 h-6 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
@@ -55,17 +95,17 @@ const ProjectDetailOverlay: React.FC<ProjectDetailOverlayProps> = ({ project, on
             alt={project.title} 
             className="w-full h-full object-cover animate-pan-slow"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/30"></div>
+          <div className={`absolute inset-0 bg-gradient-to-t ${theme.heroGradient}`}></div>
           
           <div className="absolute bottom-0 left-0 w-full p-8 md:p-16 flex flex-col md:flex-row items-end justify-between gap-8">
             <div>
-                <span className="inline-block bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+                <span className={`inline-block ${isForest ? 'bg-emerald-500/20 border border-emerald-500/50 text-emerald-300' : 'bg-sky-500 text-white'} text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4`}>
                 {project.category}
                 </span>
-                <h2 className="text-5xl md:text-8xl font-black text-slate-900 font-display leading-none mb-2 mix-blend-multiply">
+                <h2 className={`text-5xl md:text-8xl font-black ${theme.textHeading} font-display leading-none mb-2 ${isForest ? 'drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'mix-blend-multiply'}`}>
                 {project.title}
                 </h2>
-                <p className="text-xl md:text-2xl text-slate-500 font-light max-w-2xl">
+                <p className={`text-xl md:text-2xl ${theme.textSub} font-light max-w-2xl`}>
                 {project.subtitle}
                 </p>
             </div>
@@ -74,7 +114,7 @@ const ProjectDetailOverlay: React.FC<ProjectDetailOverlayProps> = ({ project, on
             {project.hasDemo && (
                 <button 
                     onClick={() => setActiveDemo(true)}
-                    className="bg-slate-900 hover:bg-sky-600 text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest shadow-xl hover:scale-105 transition-all flex items-center gap-3 animate-bounce-subtle"
+                    className={`${theme.btnPrimary} px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-all flex items-center gap-3 animate-bounce-subtle`}
                 >
                     <span>Launch Experience</span>
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -90,28 +130,28 @@ const ProjectDetailOverlay: React.FC<ProjectDetailOverlayProps> = ({ project, on
         <div className="max-w-7xl mx-auto px-6 py-16 md:py-24">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
             
-            {/* Left Column: Stats (Sheikah Data Style) */}
+            {/* Left Column: Stats */}
             <div className="md:col-span-4 space-y-8 sticky top-24 self-start">
-               <div className="border-t-2 border-slate-100 pt-6">
-                 <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Role</h4>
-                 <p className="text-lg font-bold text-slate-900">{project.stats.role}</p>
+               <div className={`border-t-2 ${theme.border} pt-6`}>
+                 <h4 className={`text-xs font-bold uppercase tracking-widest ${theme.statsLabel} mb-2`}>Role</h4>
+                 <p className={`text-lg font-bold ${theme.statsValue}`}>{project.stats.role}</p>
                </div>
                
-               <div className="border-t-2 border-slate-100 pt-6">
-                 <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Client</h4>
-                 <p className="text-lg font-bold text-slate-900">{project.stats.client}</p>
+               <div className={`border-t-2 ${theme.border} pt-6`}>
+                 <h4 className={`text-xs font-bold uppercase tracking-widest ${theme.statsLabel} mb-2`}>Client</h4>
+                 <p className={`text-lg font-bold ${theme.statsValue}`}>{project.stats.client}</p>
                </div>
 
-               <div className="border-t-2 border-slate-100 pt-6">
-                 <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Timeline</h4>
-                 <p className="text-lg font-bold text-slate-900">{project.stats.timeline}</p>
+               <div className={`border-t-2 ${theme.border} pt-6`}>
+                 <h4 className={`text-xs font-bold uppercase tracking-widest ${theme.statsLabel} mb-2`}>Timeline</h4>
+                 <p className={`text-lg font-bold ${theme.statsValue}`}>{project.stats.timeline}</p>
                </div>
 
-               <div className="border-t-2 border-slate-100 pt-6">
-                 <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Tech Stack</h4>
+               <div className={`border-t-2 ${theme.border} pt-6`}>
+                 <h4 className={`text-xs font-bold uppercase tracking-widest ${theme.statsLabel} mb-2`}>Tech Stack</h4>
                  <div className="flex flex-wrap gap-2">
                    {project.stats.stack.map(tech => (
-                     <span key={tech} className="bg-slate-100 text-slate-600 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide">
+                     <span key={tech} className={`${theme.tagBg} ${theme.tagText} px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide`}>
                        {tech}
                      </span>
                    ))}
@@ -122,8 +162,8 @@ const ProjectDetailOverlay: React.FC<ProjectDetailOverlayProps> = ({ project, on
             {/* Right Column: Narrative */}
             <div className="md:col-span-8 space-y-16">
                <div>
-                 <h3 className="text-3xl font-display font-bold text-slate-900 mb-6">The Challenge</h3>
-                 <p className="text-lg text-slate-600 leading-relaxed whitespace-pre-line">
+                 <h3 className={`text-3xl font-display font-bold ${theme.textHeading} mb-6`}>The Challenge</h3>
+                 <p className={`text-lg ${theme.textMain} leading-relaxed whitespace-pre-line`}>
                    {project.challenge}
                  </p>
                </div>
@@ -136,8 +176,8 @@ const ProjectDetailOverlay: React.FC<ProjectDetailOverlayProps> = ({ project, on
                )}
 
                <div>
-                 <h3 className="text-3xl font-display font-bold text-slate-900 mb-6">The Solution</h3>
-                 <p className="text-lg text-slate-600 leading-relaxed whitespace-pre-line">
+                 <h3 className={`text-3xl font-display font-bold ${theme.textHeading} mb-6`}>The Solution</h3>
+                 <p className={`text-lg ${theme.textMain} leading-relaxed whitespace-pre-line`}>
                    {project.solution}
                  </p>
                </div>
@@ -156,8 +196,8 @@ const ProjectDetailOverlay: React.FC<ProjectDetailOverlayProps> = ({ project, on
         </div>
 
         {/* Footer Navigation */}
-        <div className="bg-slate-50 py-16 text-center">
-            <button onClick={handleClose} className="inline-flex items-center gap-2 text-slate-900 font-bold uppercase tracking-widest hover:text-sky-600 transition-colors">
+        <div className={`${isForest ? 'bg-black/20' : 'bg-slate-50'} py-16 text-center`}>
+            <button onClick={handleClose} className={`inline-flex items-center gap-2 ${theme.backBtn} font-bold uppercase tracking-widest transition-colors`}>
               <svg className="w-4 h-4 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
@@ -181,6 +221,9 @@ const ProjectDetailOverlay: React.FC<ProjectDetailOverlayProps> = ({ project, on
         .animate-bounce-subtle {
             animation: bounceSubtle 2s infinite ease-in-out;
         }
+        /* Custom Scrollbar specifically for the overlay */
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+        .scrollbar-thumb-emerald-800::-webkit-scrollbar-thumb { background-color: rgba(6, 78, 59, 0.5); border-radius: 10px; }
       `}</style>
     </div>
   );

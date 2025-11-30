@@ -23,7 +23,7 @@ const App: React.FC = () => {
       title: 'Forest Sanctuary',
       subtitle: 'A serene digital marketplace focusing on sustainability.',
       category: 'E-Commerce',
-      heroImage: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2670&auto=format&fit=crop",
+      heroImage: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=2641&auto=format&fit=crop", // Darker, mysterious forest
       description: "A serene digital marketplace.",
       challenge: "The client needed a platform that didn't feel like a typical shop. They wanted users to feel like they were walking through a forest, discovering sustainable products naturally.",
       solution: "We built a 3D WebGL experience where products are discovered by exploring a procedural forest. The checkout process is seamless, integrated into the environment as a 'gathering' mechanic.",
@@ -35,8 +35,8 @@ const App: React.FC = () => {
         stack: ["React", "Three.js", "Shopify API", "WebGL"]
       },
       gallery: [
-        "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2674&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=2544&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2564&auto=format&fit=crop", // Glowing mushrooms (matches items)
+        "https://images.unsplash.com/photo-1598335624170-174494db9fe8?q=80&w=2670&auto=format&fit=crop"  // Deep green ferns/texture
       ]
     },
     {
