@@ -3,35 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Traumwelten - AI Parallax Experience</title>
+    <title>Hylia Creative - Immersive Web Design</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
       
+      :root {
+        --color-bg: #F8FAFC;
+        --color-text-main: #1E293B;
+        --color-accent: #0EA5E9;
+      }
+
       body {
-        background-color: #0f172a;
-        color: #e2e8f0;
+        background-color: var(--color-bg);
+        color: var(--color-text-main);
         font-family: 'Inter', sans-serif;
         overflow-x: hidden;
       }
       
-      h1, h2, h3 {
+      h1, h2, h3, .font-display {
         font-family: 'Cinzel', serif;
       }
 
-      /* Custom Scrollbar */
+      .font-sans {
+        font-family: 'Inter', sans-serif;
+      }
+
+      /* Custom Scrollbar - Tech/Clean style */
       ::-webkit-scrollbar {
-        width: 10px;
+        width: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #0f172a;
+        background: #F1F5F9;
       }
       ::-webkit-scrollbar-thumb {
-        background: #475569;
-        border-radius: 5px;
+        background: #CBD5E1;
+        border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #64748b;
+        background: #94A3B8;
       }
     </style>
   <script type="importmap">

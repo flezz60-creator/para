@@ -5,11 +5,13 @@ const ParallaxSection: React.FC<ParallaxSectionProps> = ({
   backgroundImage, 
   children, 
   speed = 0.5,
+  contentSpeed = 0,
   height = "h-screen",
   overlayColor = "bg-black/40"
 }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [offsetY, setOffsetY] = useState(0);
+  const [contentOffsetY, setContentOffsetY] = useState(0);
 
   // Use requestAnimationFrame for smoother parallax performance
   useEffect(() => {
@@ -21,10 +23,16 @@ const ParallaxSection: React.FC<ParallaxSectionProps> = ({
         // Calculate offset relative to viewport
         const scrollPosition = window.pageYOffset;
         const sectionTop = sectionRef.current.offsetTop;
+        const windowHeight = window.innerHeight;
         
-        // Simple calculation: move background based on scroll position relative to section
-        const distance = scrollPosition - sectionTop;
-        setOffsetY(distance * speed);
+        // Only animate when near viewport to save resources
+        const isInView = rect.top < windowHeight && rect.bottom > 0;
+        
+        if (isInView) {
+            const distance = scrollPosition - sectionTop;
+            setOffsetY(distance * speed);
+            setContentOffsetY(distance * contentSpeed);
+        }
       }
     };
 
@@ -37,7 +45,7 @@ const ParallaxSection: React.FC<ParallaxSectionProps> = ({
     loop(); 
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [speed]);
+  }, [speed, contentSpeed]);
 
   return (
     <div 
@@ -60,8 +68,14 @@ const ParallaxSection: React.FC<ParallaxSectionProps> = ({
       {/* Overlay */}
       <div className={`absolute inset-0 ${overlayColor}`} />
 
-      {/* Content Layer (Stays relatively static or moves at normal speed) */}
-      <div className="relative z-10 w-full max-w-4xl px-6">
+      {/* Content Layer */}
+      <div 
+        className="relative z-10 w-full max-w-4xl px-6"
+        style={{
+            transform: `translateY(${contentOffsetY}px)`,
+            willChange: 'transform'
+        }}
+      >
         {children}
       </div>
     </div>

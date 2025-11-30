@@ -27,7 +27,6 @@ const FloatingIslandSection: React.FC = () => {
 
       // 2. Wenn nicht, generieren wir sie EINMALIG exakt nach Vorgabe
       try {
-        // Wir starten beide Generierungen parallel für Speed
         const [generatedIsland, generatedSky] = await Promise.all([
           generateDreamImage(ISLAND_PROMPT, { aspectRatio: "1:1" }),
           generateDreamImage(SKY_PROMPT, { aspectRatio: "16:9" })
@@ -78,25 +77,23 @@ const FloatingIslandSection: React.FC = () => {
   return (
     <div 
       ref={containerRef} 
-      className="relative w-full h-[250vh] bg-[#0f172a]"
+      className="relative w-full h-[300vh] bg-gradient-to-b from-sky-200 via-sky-100 to-sky-50" 
     >
       <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center">
         
-        {/* Ladebildschirm (Nur beim allerersten Mal sichtbar) */}
+        {/* Ladebildschirm */}
         {loading && (
-          <div className="absolute inset-0 z-50 bg-[#0f172a] flex flex-col items-center justify-center text-white">
-            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <h2 className="text-xl font-serif tracking-widest">Erschaffe Insel...</h2>
-            <p className="text-sm text-slate-400 mt-2">Die Architektur wird gebaut (dies geschieht nur einmal)</p>
+          <div className="absolute inset-0 z-50 bg-sky-50 flex flex-col items-center justify-center text-sky-900">
+            <div className="w-16 h-16 border-4 border-sky-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <h2 className="text-xl font-display tracking-widest uppercase">Initialisiere Welt...</h2>
           </div>
         )}
 
         {/* 1. Hintergrund (Himmel) */}
         <div 
-          className="absolute inset-0 w-full h-full bg-sky-300 transition-opacity duration-1000"
+          className="absolute inset-0 w-full h-full bg-sky-200 transition-opacity duration-1000"
           style={{
             opacity: loading ? 0 : 1,
-            // Fallback CSS Gradient falls Bild noch lädt oder fehlt
             background: skyImage ? `url(${skyImage})` : 'linear-gradient(to bottom, #87CEEB, #E0F6FF)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -113,10 +110,9 @@ const FloatingIslandSection: React.FC = () => {
             <div 
               className="relative w-[85vmin] h-[85vmin] md:w-[60vmin] md:h-[60vmin] transition-transform duration-75 ease-out animate-float"
               style={{
-                // Kombinierte Transformation: Schweben + Parallax Zoom auf Nutzer zu
                 transform: `
                   translateY(${scrollProgress * 250}px) 
-                  scale(${0.6 + (scrollProgress * 3.5)})
+                  scale(${0.6 + (scrollProgress * 4.5)})
                 `, 
               }}
             >
@@ -125,28 +121,39 @@ const FloatingIslandSection: React.FC = () => {
                 alt="Magical Floating Island" 
                 className="w-full h-full object-cover"
                 style={{
-                  // Maske sorgt für weiche Kanten, damit es nicht viereckig aussieht
                   maskImage: 'radial-gradient(circle at center, black 45%, transparent 68%)',
                   WebkitMaskImage: 'radial-gradient(circle at center, black 45%, transparent 68%)',
-                  filter: 'drop-shadow(0 30px 50px rgba(0,0,100,0.3))'
+                  filter: 'drop-shadow(0 30px 50px rgba(0,0,0,0.2))'
                 }}
               />
             </div>
           </div>
         )}
 
-        {/* Text Overlay */}
+        {/* Text Overlay - Static Title */}
         <div 
-          className="absolute bottom-10 left-0 right-0 flex justify-center z-20 pointer-events-none transition-all duration-500"
+          className="absolute bottom-20 md:bottom-24 left-0 right-0 flex justify-center z-20 pointer-events-none transition-all duration-700 ease-in-out"
           style={{ 
-            opacity: 1 - scrollProgress * 3,
-            transform: `translateY(${scrollProgress * 50}px)`
+            opacity: scrollProgress > 0.85 ? 0 : 1, // Fade out only at the very end
+            transform: `translateY(${scrollProgress * 20}px) scale(${1 + scrollProgress * 0.1})`
           }}
         >
-          <div className="text-center bg-white/10 backdrop-blur-md px-10 py-6 rounded-full border border-white/20 shadow-2xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-white font-serif mb-0 drop-shadow-md">
-              Hylia's Ruhe
+          <div className="text-center px-4 max-w-4xl">
+            <h1 
+              className="text-4xl md:text-7xl font-black text-white font-display mb-4 drop-shadow-xl tracking-tighter animate-fade-in-up" 
+              style={{textShadow: '0 4px 30px rgba(0,0,0,0.15)'}}
+            >
+              HYLIA
             </h1>
+            
+            <div 
+               className="inline-block bg-white/30 backdrop-blur-md px-8 py-3 rounded-full border border-white/50 shadow-lg animate-fade-in-up"
+               style={{ animationDelay: '100ms' }}
+            >
+               <span className="text-sm md:text-base font-bold text-white tracking-[0.3em] uppercase font-sans">
+                 Creative Studio
+               </span>
+            </div>
           </div>
         </div>
 
@@ -157,8 +164,15 @@ const FloatingIslandSection: React.FC = () => {
           0%, 100% { transform: translateY(0px) scale(1); }
           50% { transform: translateY(-15px) scale(1.02); }
         }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         .animate-float {
           animation: float 8s ease-in-out infinite;
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 0.5s ease-out forwards;
         }
       `}</style>
     </div>
